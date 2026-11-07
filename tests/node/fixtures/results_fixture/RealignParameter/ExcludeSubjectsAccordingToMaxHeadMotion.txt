@@ -1,0 +1,12 @@
+Excluding Criteria: 3.0mm and 3.0 degree in max head motion
+None
+
+Excluding Criteria: 2.0mm and 2.0 degree in max head motion
+None
+
+Excluding Criteria: 1.0mm and 1.0 degree in max head motion
+SubC
+
+Excluding Criteria: 0.5mm and 0.5 degree in max head motion
+SubB
+SubC

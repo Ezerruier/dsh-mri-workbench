@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "MRI 静息态工作台",
+    "description": "在 Harness 内扫描数据目录、生成并校验 DPARSF 预处理配置、后台启动 DPABI/DPARSF 预处理，并在会话顶部后台任务里查看实时日志。"
+  }
+}

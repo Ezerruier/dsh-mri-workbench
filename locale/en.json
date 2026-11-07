@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "MRI resting-state workbench",
+    "description": "Scan MRI datasets, prepare and validate DPARSF preprocessing configurations, launch DPABI/DPARSF preprocessing in the background, and follow live logs in the session's background jobs."
+  }
+}

@@ -1,0 +1,132 @@
+Id	Category	CfgPath	Type	Default	Meaning	When	Pitfall	Source
+1	全局	DPARSFVersion	char，如 'V5.5_250415'	模板内 'V5.5_250415'	配置版本标记	永不生效（引擎不读）	DPABI 安装版为 V10.0_260625，但模板里仍写 V5.5_250415；改它没有任何作用	DPARSFA_run.m 全文无引用
+2	全局	WorkingDir	char 绝对路径	模板内是无意义的开发机路径	工作目录（用户数据根目录）	全部步骤	引擎不校验存在性；目录缺失时在第一个 cd 处抛 MATLAB:cd:NonExistentFolder	DPARSFA_run.m:39-42,82-84
+3	全局	DataProcessDir	char 绝对路径	缺省=WorkingDir	真正读写数据的根目录	全部步骤	与 WorkingDir 可指向不同位置；引擎所有路径都用它拼接；位置参数 WorkingDir 会同时覆盖两者	DPARSFA_run.m:39-42,82-84
+4	全局	SubjectID	cellstr	{}	被试 ID 列表（同时是目录名）	全部步骤	空 cell 不报错并打印 Congratulations（静默空跑，实验 C）；顺序需与目录一致	DPARSFA_run.m:44-49,59
+5	全局	SubjectNum	double（只读输出）	运行时=length(SubjectID)	被试数	运行时赋值	不要作为输入；引擎会覆盖	DPARSFA_run.m:59
+6	全局	FunctionalSessionNumber	double ≥1	1	功能像 session 数	全部功能像步骤	第 2 个 session 起目录必须叫 S2_FunRaw、S3_FunRaw…；不是索引 0	DPARSFA_run.m:92-94,250-253
+7	全局	StartingDirName	char	'FunRaw'（模板）	起始目录名	所有步骤的输入目录	支持续跑：FunImg/FunImgA/FunImgAR/FunImgARW…；启用 DICOM 转换或 BIDS 时引擎强制改为 FunImg	DPARSFA_run.m:278,334,816,1053,3024,3246,3447,3475,3966,4054,4096,4623,4689,4942,5118
+8	全局	TimePoints	double	0	期望时间点数，0=不校验	删首点/切片/realign/标准化/平滑前校验	>0 且与实际不符时写入 Error cell 并在该步后提前 return（不抛异常）；0 时完全不检查	DPARSFA_run.m:635-677,975,3055,3338,4558
+9	全局	TR	double 秒	0（模板）	重复时间	切片时间、滤波、ALFF、detrend	TR=0 时强制从 NIfTI 头取；头无 timing.tspace 则硬 error 'Can NOT retrieve the TR information from the NIfTI images'（实验 B）	DPARSFA_run.m:512-623,791-797,3000,4028
+10	全局	TRSet	double 矩阵（输出）	无	每被试每 session 的 TR	TR=0 时自动填充	Runner 可从返回 Cfg.TRSet 做 QC/日志	DPARSFA_run.m:527-621
+11	全局	IsAllowGUI	double 0/1	字段缺失时=1	0=无 GUI 模式：跳过交互重定向、QC 阈值 GUI 与标准化检查图	交互/出图步骤	必须传数值 0；传字符串 '0' 在未编译 MATLAB 中为真（double('0')=48，实验 t2b）	DPARSFA_run.m:51-56,239-241,1210,1329,1507,1940,3264,4195,4945
+12	全局	ParallelWorkersNumber	double	0	并行池 worker 数（0=串行）	工作台 headlessRunner 在 DPARSFA_run 前按 min(N,物理核心,被试数) 显式建池；引擎 :1704-1717 仅在无池时兜底	N=0 不留池→parfor 串行；N 会被上限截断；建池失败自动回退串行并写日志（实测 2 worker 生效）	DPARSFA_run.m:1699-1717; mrw/headlessRunner.m:62-110
+13	输入	IsNeedConvertFunDCM2IMG	double 0/1	0	功能像 DICOM→NIfTI（dcm2niix 输出到 FunImg/<subj>）	最前，之后 StartingDirName 强制 FunImg	需 DPABI/DPARSF/dcm2nii/dcm2niix.exe；DirDCM(3) 取第一个文件，遇到隐藏文件/`.DS_Store` 逻辑脆弱	DPARSFA_run.m:95-97,256-279
+14	输入	IsNeedConvertT1DCM2IMG	double 0/1	0	T1 DICOM→NIfTI 到 T1Img/<subj>	最前	dcm2niix 不会生成 co*；后续仍可能触发 co* 检查	DPARSFA_run.m:98-100,282-302
+15	输入	IsNeedReorientCropT1Img	double 0/1	0	对 T1Img 里的 NIfTI 再跑 dcm2niix -r Y -x Y，生成 co* 头位/裁剪图	转换后、其他 T1 步骤前	生成 co* T1 的正规途径，可消除 co* 缺失导致的 headless 弹窗错误	DPARSFA_run.m:134-136,338-360
+16	输入	IsBIDStoDPARSF	double 0/1	0	从 <DataProcessDir>/BIDS 重建 DPARSF 目录结构（FunImg/T1Img/FieldMap）	最前	=1 时引擎内部置 UseNoCoT1Image=1（跳过 co* 确认），但要求 BIDS 目录结构存在	DPARSFA_run.m:102-106,331-335
+17	输入	IsApplyDownloadedReorientMats	double 0/1	0	应用 DownloadedReorientMats/ 下预置的 *_ReorientFunImgMat.mat / *_ReorientT1ImgMat.mat	最前之一	目录或文件缺失时静默跳过；该段还有未受 IsAllowGUI 保护的 questdlg（run:435）	DPARSFA_run.m:109-111,364-504
+18	输入	IsNeedConvert4DFunInto3DImg	—（历史字段）	无	4D→3D 转换开关（代码已注释）	永不生效	4D NIfTI 原生支持；写入无影响	DPARSFA_run.m:112-114（注释）
+19	输入	IsNeedUnzipT1IntoT1Img	—（历史字段）	无	T1 解压开关（已注释）	永不生效	解压逻辑已内置到各步骤	DPARSFA_run.m:131-133（注释）
+20	输入	IsDelFilesBeforeNormalize	—（历史字段）	无	标准化前删中间文件（已注释）	永不生效	保留中间文件便于断点续跑	DPARSFA_run.m:167-169,3249-3261（注释）
+21	输入	IsDelDetrendedFiles	—（历史字段）	无	删除 detrend 文件（已注释）	永不生效	—	DPARSFA_run.m:182-184（注释）
+22	输入	SpecialMode	double 1/2/3	不存在（等价 1）	1=人；2=猴；3=鼠（切换 TPM/标准化模板/出图底图）	分割、标准化、出图	2/3 需要 DPABI/Templates 下对应模板；Blank 模板无此字段	DPARSFA_run.m:2296-2300,3106-3113,3187-3218,3273-3278
+23	时间	IsRemoveFirstTimePoints	double 0/1	0	GUI 开关；引擎不读	不生效	真正生效条件只有 RemoveFirstTimePoints>0；两者不一致时以数值为准	DPARSFA_run.m 全文 0 命中
+24	时间	RemoveFirstTimePoints	double ≥0	0	删除每个 run 前 N 个时间点	切片时间之前	删除后会把 TimePoints 减 N（run:677）；3D/4D 与 .img 分支行为不同；续跑时不要重复设置	DPARSFA_run.m:115-117,627-678
+25	时间	IsSliceTiming	double 0/1	0	切片时间校正（SPM temporal.st）	realign 之前	开启后 StartingDirName 追加 'A'；SliceNumber=0 时依赖 SliceOrderInfo.tsv 或 BIDS json，否则用高风险默认交错序	DPARSFA_run.m:118-120,685-817
+26	时间	SliceTiming.SliceNumber	double	0	层数；0=从 NIfTI 头自动读取	SliceTiming 开启时	=0 且无 SliceOrderInfo.tsv 时假设 [1:2:N,2:2:N]，参考层=so(ceil(N/2))（run:727-782）	DPARSFA_run.m:727-789
+27	时间	SliceTiming.SliceOrder	double 向量	[1:2:33,2:2:32]（33 层示例）	层采集顺序（1-based）	SliceNumber>0 时使用	长度必须等于 SliceNumber，否则 SPM 抛 matlabbatch:run:jobfailederr（实验 E）；模板是 33 层示例，直接沿用极易出错	DPARSFA_run.m:749-769,787-788
+28	时间	SliceTiming.ReferenceSlice	double	0	参考层	SliceNumber>0 时使用	0 合法（第一层）；SliceNumber=0 时被自动覆盖为 so(ceil(N/2))	DPARSFA_run.m:782,788
+29	时间	SliceTiming.TR	—（历史字段）	无	历史 TR 字段	永不生效（DPARSF_run 会复制，引擎不读）	不要把 TR 写在这里，用顶层 Cfg.TR	DPARSFA_run.m:85-91（注释）;DPARSF_run.m:31
+30	时间	SliceTiming.TA	—（历史字段）	无	历史 TA 字段	永不生效	同 SliceTiming.TR	DPARSF_run.m:32
+31	头动	IsRealign	double 0/1	0	SPM realign estimate&reslice	最早的功能像步骤	开启后后缀 'R'；rp_*.txt、mean*.nii 移入 RealignParameter/<subj>；该步产生 FD_Power/FD_Jenkinson/FD_VanDijk	DPARSFA_run.m:121-123,951-1153
+32	头动	IsCalVoxelSpecificHeadMotion	double 0/1	0	体素级头动 HMvox_X/Y/Z 与 TDvox/FDvox	realign 之后	Covremove.HeadMotion 取 11-14 时必需；依赖 RealignParameter/mean*	DPARSFA_run.m:124-126,1160-1204
+33	头动	IsNeedReorientFunImgInteractively	double 0/1	0	交互重定向功能像（GUI）	realign 后	IsAllowGUI=0 时整块被跳过（不报错，静默不做）	DPARSFA_run.m:127-129,1327-1499
+34	头动	IsNeedReorientT1ImgInteractively	double 0/1	0	交互重定向 T1，产生 ReorientMats/*.mat 与 QC 评分	结构像步骤前	要求 T1Img 目录已存在（run:1210）；IsAllowGUI=0 跳过	DPARSFA_run.m:137-139,1208-1324
+35	头动	IsNeedReorientInteractivelyAfterCoreg	double 0/1	0	coreg 后交互重定向	coreg 后	IsAllowGUI=0 跳过	DPARSFA_run.m:149-151,1938-2075
+36	结构	IsBet	double 0/1	0	脑提取（Windows 用 DPABI 内置 bet；Linux/Mac 用 FSL bet 或 docker）	realign 后（功能像）+ 结构像	输出 T1ImgBet/<subj>/Bet_*；T1 端会先做 co* 检查，headless 下无 co* 会硬报错	DPARSFA_run.m:140-142,1528-1696
+37	结构	IsAutoMask	double 0/1	0	自动脑掩膜（docker 3dAutomask 或 w_Automask）	coreg 后	依赖 docker 或本地 w_Automask；输出 Masks/AutoMasks/；WholeBrain.Mask='AutoMask' 时需要它	DPARSFA_run.m:143-145,2082-2130
+38	场图	FieldMap.IsNeedConvertDCM2IMG	double 0/1	字段不存在	场图 DICOM→NIfTI	最前	需 FieldMap/<measure>Raw 目录	DPARSFA_run.m:304-328
+39	场图	FieldMap.IsCalculateVDM	double 0/1	不存在	计算 VDM	场图转换后	依赖 BIDS json 的 EchoTime/PhaseEncodingDirection/EffectiveEchoSpacing 等	DPARSFA_run.m:825-947
+40	场图	FieldMap.DataFormat	char 'PhaseDiff' 或其他	不存在	场图数据布局（PhaseDiff+Magnitude 或 Phase1/2+Magnitude1/2）	VDM/realign	只有 'PhaseDiff' 被特判，其余都按 Phase1/2 分支	DPARSFA_run.m:831,872,940
+41	场图	FieldMap.EPIBasedFieldMap	double 0/1	不存在	写入 VDM epifm 参数	VDM	—	DPARSFA_run.m:916
+42	场图	FieldMap.TE1	double 秒；0=自动读 json	不存在	回波时间 1	VDM	0 时先读 PhaseDiff json 的 EchoTime1，再退回 Magnitude1 json 的 EchoTime	DPARSFA_run.m:840-854,887-893
+43	场图	FieldMap.TE2	double 秒；0=自动读 json	不存在	回波时间 2	VDM	同上（EchoTime2 / Magnitude2）	DPARSFA_run.m:855-869,894-900
+44	场图	FieldMap.IsFieldMapCorrectionUnwarpRealign	double 0/1	不存在	realign 换成 RealignUnwarp 并带 VDM	realign	需先算 VDM 并存在 FunFieldMap/VDMImg；字段缺失时等 realign 分支不进入	DPARSFA_run.m:954-996
+45	结构	IsNeedT1CoregisterToFun	double 0/1	0	T1 配准到功能空间（SPM coreg.estimate）	realign/bet 后	缺 T1Img→cd 硬错误（实验 D）；无 co* 且 T1Img 存在→questdlg，headless 下硬报错（实验 t5）；无 mean 功能像时会现算（仅单 session）	DPARSFA_run.m:146-148,1721-1933
+46	结构	IsSegment	double 0/1/2	0	1=旧分割（T1ImgSegment, seg_sn.mat）；2=New Segment（T1ImgNewSegment, seg_sn.mat）	coreg 后；无 T1ImgCoreg 时直接用 T1Img	SPM12 下走 spm.tools.oldseg / spm.spatial.preproc；失败被 try/catch 后重新 error('Error detected during segmentation...')	DPARSFA_run.m:152-154,2134-2379
+47	结构	Segment.AffineRegularisationInSegmentation	char 'mni'/'eastern'/'subj'	'mni'	仿射正则化类型	分割	猴模式(SpecialMode=2)强制 'subj'；东亚脑用 'eastern'	DPARSFA_run.m:2286,2334,2298
+48	结构	IsDARTEL	double 0/1	0	DARTEL 建模板 + VBM 结果 MNI 标准化	Segment(2) 后	无 T1ImgNewSegment→cd 硬错误；模板/流场只在 SubjectID{1} 目录找 Template_6.*，被试集合变更后需重跑	DPARSFA_run.m:155-157,2385-2451
+49	标准化	IsNormalize	double 0/1/2/3/4	0	1=EPI 模板；2=分割 seg_sn.mat；3=DARTEL；4=T1 模板（鼠）	与 Normalize.Timing 联动	0=不标准化；>0 才需要 T1 链；DPARSF_run 会据此自动设置 coreg/segment/DARTEL	DPARSFA_run.m:164-166,3030-3310,4727-4994
+50	标准化	Normalize.Timing	char 'OnFunctionalData'/'OnResults'	'OnResults'	功能像阶段标准化，还是只对 Results 指标标准化	IsNormalize>0 时	'OnResults' 不改变功能像目录；ALFF/ReHo 等指标若在 MNI 空间计算通常需 'OnFunctionalData'	DPARSFA_run.m:3031,4732
+51	标准化	Normalize.BoundingBox	2x3 double	[-90 -126 -72;90 90 108]	标准化输出边界	标准化与结果标准化	体素尺寸变化时需同步 VoxSize；鼠模式模板里是 NaN	DPARSFA_run.m:3102-3103,3159-3160,3370,4809
+52	标准化	Normalize.VoxSize	1x3 double	[3 3 3]	输出体素大小	标准化、DARTEL 平滑	IsSmooth==2（DARTEL 平滑）也用它	DPARSFA_run.m:3103,3160,3371,4859
+53	标准化	IsSmooth	double 0/1/2	0	1=SPM 平滑；2=DARTEL 平滑	与 Smooth.Timing 联动	2 需要 DARTEL/T1ImgNewSegment；平滑后后缀 'S'	DPARSFA_run.m:170-172,3318-3448,4998-5120
+54	标准化	Smooth.Timing	char 'OnFunctionalData'/'OnResults'	'OnResults'	平滑阶段	IsSmooth≥1 时	结果平滑只作用于 Results 下指标图（含 m/z 图）	DPARSFA_run.m:3319,4999
+55	标准化	Smooth.FWHM	1x3 double	[4 4 4]	高斯核 FWHM mm	平滑	ReHo 平滑（CalReHo.SmoothReHo=1）也用这个 FWHM	DPARSFA_run.m:3357,4142
+56	标准化	IsWarpMasksIntoIndividualSpace	double 0/1	0	掩膜回原空间，在个体空间计算指标/回归	依赖分割或 DARTEL	0 时在 MNI 空间重采样掩膜（AllResampled_*）；1 时要求 WarpedMasks 或分割产物	DPARSFA_run.m:176-178,2575-2683,3567-3631
+57	标准化	MaskFile	char 'Default'/''/绝对路径	'Default'	脑掩膜（计算指标与回归用）	指标计算、回归	'Default'=Templates/BrainMask_05_91x109x91；用户路径不存在时后续 y_Read 报错	DPARSFA_run.m:173-175,3573-3631
+58	回归	IsCovremove	double 0/1	0	协变量回归总开关	位置由 Covremove.Timing 决定	必须与 Timing 配套；AfterNormalize 需要标准化产物与 MNI 掩膜	DPARSFA_run.m:158-160,2489,2807,3487,3716
+59	回归	Covremove.Timing	char 'AfterRealign'/'AfterNormalize'	'AfterRealign'	回归时机	IsCovremove=1 时	影响目录后缀顺序：AfterRealign→C 早期追加；AfterNormalize→W 先于 C	DPARSFA_run.m:2489,2807,3487,3716
+60	回归	Covremove.PolynomialTrend	double 0-3	1	多项式趋势阶数（0=常数，1=+线性，2=+二次，3=+三次）	回归	—	DPARSFA_run.m:2821,3730
+61	回归	Covremove.HeadMotion	double 1/2/3/4/11-14	4	头动回归模型：1=当前 6 参数；2=当前+上一时刻；3=当前+平方；4=Friston24；11-14=体素级模型	回归（需要 realign 产物；11-14 还需体素级头动）	11-14 时 ImgCovModel=值-10；>4 需要 IsCalVoxelSpecificHeadMotion=1，否则找不到 HMvox_*	DPARSFA_run.m:2826-2850,3738-3788
+62	回归	Covremove.WM.IsRemove	double 0/1	1	白质信号是否回归	回归	—	DPARSFA_run.m:2889-2924,3828-3879
+63	回归	Covremove.WM.Mask	char 'SPM'/'Segment'	'SPM'	白质掩膜来源	回归	'SPM'=Templates/WhiteMask_09_91x109x91（或 Warped/AllResampled）；'Segment'=分割 c2 阈值化图	DPARSFA_run.m:2890-2893,2920-2923,3829-3832
+64	回归	Covremove.WM.MaskThreshold	double	0.99	分割掩膜阈值	Mask='Segment' 时	—	DPARSFA_run.m:2544,3540
+65	回归	Covremove.WM.Method	char 'Mean'/'CompCor'	'Mean'	白质信号提取方法	回归	CompCor 用 y_CompCor_PC；PC 数取自 CSF.CompCorPCNum（共用字段）	DPARSFA_run.m:2889-2911,3858-3866
+66	回归	Covremove.WM.CompCorPCNum	double	5	CompCor PC 数	Method='CompCor' 时	代码实际用 Cfg.Covremove.CSF.CompCorPCNum（run:2907,3862），WM 自己的值不生效	DPARSFA_run.m:2907,3862
+67	回归	Covremove.CSF.IsRemove	double 0/1	1	CSF 信号是否回归	回归	—	DPARSFA_run.m:2896-2931,3835-3884
+68	回归	Covremove.CSF.Mask	char 'SPM'/'Segment'	'SPM'	CSF 掩膜来源	回归	—	DPARSFA_run.m:2897-2900,2926-2930
+69	回归	Covremove.CSF.MaskThreshold	double	0.99	分割掩膜阈值	Mask='Segment' 时	—	DPARSFA_run.m:2563,3558
+70	回归	Covremove.CSF.Method	char 'Mean'/'CompCor'	'Mean'	CSF 提取方法	回归	—	DPARSFA_run.m:2896-2911
+71	回归	Covremove.CSF.CompCorPCNum	double	5	CompCor PC 数（WM/CSF 实际共用）	Method='CompCor' 时	WM 和 CSF 同时 CompCor 时 PCs 合并后都按此数量取	DPARSFA_run.m:2907,3862
+72	回归	Covremove.WholeBrain.IsRemove	double 0/1	0	全脑信号（GSR）是否回归	回归	=1 即 GSR，与主流静息态惯例冲突，需明确告知用户	DPARSFA_run.m:2935-2941,3889-3919
+73	回归	Covremove.WholeBrain.Mask	char 'SPM'/'AutoMask'	'SPM'	全脑掩膜来源	WholeBrain.IsRemove=1 时	'AutoMask' 需要 IsAutoMask=1 产物	DPARSFA_run.m:2936-2939,3890-3893
+74	回归	Covremove.WholeBrain.Method	char 'Mean'	'Mean'	全脑信号提取方法	GSR	代码直接取 Mean；该字段基本无效	DPARSFA_run.m:2935-2941
+75	回归	Covremove.WholeBrain.IsBothWithWithoutGSR	double 0/1	0	"先无 GSR 再带 GSR 重跑"（GUI 专用）	引擎不读	只被 GUI/DPARSFA_RerunWithGSR.m 使用；写进 Cfg 无效果	DPARSFA_run.m 全文 0 命中
+76	回归	Covremove.OtherCovariatesROI	cell	[]	其他协变量 ROI：球 [x y z r]、文件或 txt 列表	Timing 对应阶段	支持 'Covariables_List:' txt 指向每被试文件；txt 需放在最后	DPARSFA_run.m:2690-2802,3638-3711
+77	回归	Covremove.OtherCovariatesROIForEachSubject	cell（输出）	无	每被试展开后的 ROI 列表	运行时生成	不要作为输入	DPARSFA_run.m:2801,3710
+78	回归	Covremove.IsHeadMotionScrubbingRegressors	double 0/1	0	把坏时间点作为单独回归量（scrubbing regressors）	回归时	依赖 FDType 对应的 FD 文件存在（RealignParameter/<subj>/FD_*.txt）	DPARSFA_run.m:2854-2884,3791-3821
+79	回归	Covremove.HeadMotionScrubbingRegressors.FDType	char 'FD_Power'/'FD_Jenkinson'	'FD_Jenkinson'	FD 类型	scrubbing regressors/Scrubbing	文件名由 FDType 直接拼接，拼错会 load 失败	DPARSFA_run.m:2857,4067
+80	回归	Covremove.HeadMotionScrubbingRegressors.FDThreshold	double	0.2	FD 阈值	同上	—	DPARSFA_run.m:2862,3799
+81	回归	Covremove.HeadMotionScrubbingRegressors.PreviousPoints	double	0	坏点前扩展点数	同上	—	DPARSFA_run.m:2865-2869
+82	回归	Covremove.HeadMotionScrubbingRegressors.LaterPoints	double	0	坏点后扩展点数	同上	—	DPARSFA_run.m:2870-2875
+83	回归	Covremove.IsAddMeanBack	double 0/1	0	回归后把均值加回，保留原始对比度	回归	—	DPARSFA_run.m:2961,3940
+84	滤波	IsFilter	double 0/1	0	理想带通滤波（y_bandpass）	位置由 Filter.Timing 决定	开启后后缀 'F'；ALFF 在 AfterNormalize 滤波之前计算（band 独立）	DPARSFA_run.m:161-163,2992-3026,4023-4056
+85	滤波	Filter.Timing	char 'BeforeNormalize'/'AfterNormalize'	'AfterNormalize'	滤波时机	IsFilter=1 时	影响后缀顺序与是否作用于 MNI 数据	DPARSFA_run.m:2993,4024
+86	滤波	Filter.ALowPass_HighCutoff	double Hz	0.1	低通上限（高频截止）	滤波	与 AHighPass_LowCutoff 顺序易混：字段名里 ALowPass=低通	DPARSFA_run.m:3006,4036
+87	滤波	Filter.AHighPass_LowCutoff	double Hz	0.01	高通下限（低频截止）	滤波	—	DPARSFA_run.m:3007,4037
+88	滤波	Filter.AAddMeanBack	char 'Yes'/'No'	'Yes'	滤波后加回均值	滤波	字符串型，不是 0/1	DPARSFA_run.m:3008,4038
+89	滤波	Filter.AMaskFilename	—（历史字段）	无	滤波掩膜（已不使用）	永不生效	滤波调用固定传空掩膜（run:3009）	DPARSFA_run.m:3009（注释 3004-3009）
+90	滤波	Filter.ARetrend	—（历史字段）	无	滤波时是否 detrend（已注释）	永不生效	detrend 由 IsDetrend / 回归多项式项负责	DPARSFA_run.m:4038（注释）
+91	滤波	Filter.ASamplePeriod	—（历史字段）	无	采样周期（已注释）	永不生效	用 Cfg.TR	DPARSFA_run.m:85-91（注释）
+92	滤波	IsDetrend	double 0/1	0	线性去趋势	y_bandpass 之前	开启后后缀 'D'；若回归中已含线性趋势通常不必开	DPARSFA_run.m:179-181,3455-3476
+93	擦洗	IsScrubbing	double 0/1	0	按 FD 删除/插值坏时间点	指标计算之前（AfterPreprocessing）	输出 FunImg…B/<subj>/<subj>_4DVolume.nii；后缀 'B'	DPARSFA_run.m:191-193,4060-4098
+94	擦洗	Scrubbing.Timing	char 'AfterPreprocessing'	'AfterPreprocessing'	擦洗时机	IsScrubbing=1 时	其他值不生效	DPARSFA_run.m:4061
+95	擦洗	Scrubbing.FDType	char 'FD_Power'/'FD_Jenkinson'	'FD_Jenkinson'	FD 类型	擦洗	按名字拼文件路径，须与 realign 产出一致	DPARSFA_run.m:4067
+96	擦洗	Scrubbing.FDThreshold	double	0.2	FD 阈值	擦洗	—	DPARSFA_run.m:4071
+97	擦洗	Scrubbing.PreviousPoints	double	0	坏点前扩展	擦洗	—	DPARSFA_run.m:4074-4078
+98	擦洗	Scrubbing.LaterPoints	double	0	坏点后扩展	擦洗	—	DPARSFA_run.m:4079-4084
+99	擦洗	Scrubbing.ScrubbingMethod	char 'cut'/'nearest'/'linear'/'spline'/'pchip'	'cut'	坏点处理方式（丢弃或插值）	擦洗	y_Scrubbing 的第 4 参数	DPARSFA_run.m:4088-4091
+100	指标	IsCalALFF	double 0/1	0	计算 ALFF/fALFF/m/z 图	Results 阶段	依赖 MaskFileForEachSubject；ALFF 的 band 独立于 Filter	DPARSFA_run.m:185-187,3972-4020
+101	指标	CalALFF.AHighPass_LowCutoff	double Hz	0.01	ALFF 高通下限	ALFF	—	DPARSFA_run.m:3990-3995
+102	指标	CalALFF.ALowPass_HighCutoff	double Hz	0.1	ALFF 低通上限	ALFF	—	DPARSFA_run.m:3990-3995
+103	指标	IsCalReHo	double 0/1	0	计算 ReHo/mReHo/zReHo	Results 阶段	依赖 mask；ReHo 在滤波之后计算	DPARSFA_run.m:194-200,4103-4149
+104	指标	CalReHo.ClusterNVoxel	double 7/19/27	27	KCC 邻域体素数	ReHo	只能取 7/19/27（GUI 三个单选）	DPARSFA_run.m:4111-4114
+105	指标	CalReHo.SmoothReHo	double 0/1	0	ReHo 结果再做一次平滑	ReHo	用 Smooth.FWHM（run:4142）	DPARSFA_run.m:4132-4145
+106	指标	IsCalDegreeCentrality	double 0/1	0	度中心性（加权/二值正相关和）	Results 阶段	阈值 rThreshold 只影响加权网络的边	DPARSFA_run.m:202-204,4153-4188
+107	指标	CalDegreeCentrality.rThreshold	double	0.25	DC 相关阈值	DC	—	DPARSFA_run.m:4162
+108	指标	IsCalFC	double 0/1	0	种子点功能连接（y_SCA，r→z）	Results 阶段	必须给 CalFC.ROIDef，否则不计算	DPARSFA_run.m:205-217,4412-4431
+109	指标	CalFC.IsMultipleLabel	double 0/1	0	ROI 文件多标签：逐标签提取/计算	FC/ROI 提取	—	DPARSFA_run.m:4425,4449
+110	指标	CalFC.ROIDef	cell	[]	ROI 定义：球 [x y z r]、掩膜文件、时间序列、txt 列表	FC/ROI 提取	球坐标须与当前空间（MNI/个体）一致；txt 里 'Seed_Time_Course_List:'/'Seed_ROI_List:'/'Covariables_List:' 有特殊语义	DPARSFA_run.m:4250-4407
+111	指标	CalFC.ROISelectedIndex	cell	{}	只选部分 ROI 索引	FC/ROI 提取	与 ROIDef 顺序对应	DPARSFA_run.m:4425,4449
+112	指标	CalFC.ROIDefForEachSubject	cell（输出）	无	每被试展开后的 ROI 定义	运行时生成	不要作为输入	DPARSFA_run.m:4406
+113	指标	IsExtractROISignals	double 0/1	0	提取 ROI 时间序列 + 质心	Results 阶段	同样依赖 CalFC.ROIDef；输出 Results/ROISignals_*/	DPARSFA_run.m:218-220,4436-4461
+114	指标	IsDefineROIInteractively	double 0/1	0	交互定义球形 ROI（GUI）	FC 之前	要求 IsAllowGUI=1 且 T1ImgCoreg；headless 下整块跳过	DPARSFA_run.m:221-223,4194-4245
+115	指标	ROICenter_DefinedInteractively	cell（输出）	无	交互定义 ROI 中心	运行时生成	不要作为输入	DPARSFA_run.m:4227
+116	指标	ROIRadius_DefinedInteractively	double 矩阵（输出）	无	交互定义 ROI 半径	运行时生成	不要作为输入	DPARSFA_run.m:4228
+117	指标	ROINumber_DefinedInteractively	double（输出）	无	交互 ROI 数量	运行时生成	不要作为输入	DPARSFA_run.m:4229,4252-4254
+118	指标	IsCalVMHC	double 0/1	0	镜像同伦连接（VMHC/zVMHC）	Results 阶段	需要对称模板标准化（IsNormalizeToSymmetricGroupT1Mean=1）时效果最好	DPARSFA_run.m:233-235,4697-4720
+119	指标	IsNormalizeToSymmetricGroupT1Mean	double 0/1	0	先建组 T1 均值对称模板再标准化（VMHC 前）	VMHC 前	需要 T1ImgSegment/T1ImgNewSegment 的正常化 T1（w*）	DPARSFA_run.m:227-229,4487-4625
+120	指标	IsSmoothBeforeVMHC	double 0/1	0	VMHC 计算前对功能像平滑	VMHC 前	用 Smooth.FWHM；后缀 'S'	DPARSFA_run.m:230-232,4628-4690
+121	指标	IsCWAS	double 0/1	0	CWAS 分析（MNI 4mm、单 session）	Results 阶段	代码固定只跑 iFunSession=1	DPARSFA_run.m:236-238,4468-4481
+122	指标	CWAS.Regressors	matrix	[]	CWAS 回归量	CWAS	—	DPARSFA_run.m:4477
+123	指标	CWAS.iter	double	0	CWAS 迭代次数	CWAS	—	DPARSFA_run.m:4478
+124	指标	IsExtractAALTC	double 0/1	0	历史字段（AAL 时间序列）	永不生效	只出现在默认值设置里	DPARSFA_run.m:224-226
+125	指标	QC.RawT1ImgQC.QCScore	double（输出）	无	交互 T1 重定向的 QC 评分	仅 GUI 交互时	IsAllowGUI=0 时永远为空；写入 QC/RawT1ImgQC.tsv	DPARSFA_run.m:1295,1306-1318
+126	指标	QC.RawT1ImgQC.QCComment	cell（输出）	无	QC 备注	仅 GUI 交互时	同上	DPARSFA_run.m:1296,1315
+127	指标	QC.RawFunImgQC.QCScore	double（输出）	无	交互功能像重定向 QC	仅 GUI 交互时	同上；写入 QC/RawFunImgQC.tsv	DPARSFA_run.m:1410,1420-1432
+128	指标	QC.RawFunImgQC.QCComment	cell（输出）	无	QC 备注	仅 GUI 交互时	同上	DPARSFA_run.m:1411,1429
+129	指标	MaskFileForEachSubject	cell（输出）	无	每被试实际使用的掩膜文件	指标计算/回归	运行时由 MaskFile + IsWarpMasksIntoIndividualSpace 决定，不要作为输入	DPARSFA_run.m:3609-3631
+130	历史	IsCalfALFF	double 0/1	无	旧版 fALFF 独立开关	永不生效	现 IsCalALFF 同时算 ALFF+fALFF；老 Cfg 可能带此字段，忽略即可	DPARSFA_run.m:188-189（注释）
+131	历史	CalALFF.ASamplePeriod	—	无	旧版采样周期	永不生效	用 Cfg.TR；老 Cfg 里可能残留	DPARSFA_run.m:88-90（注释）

@@ -1,0 +1,209 @@
+Figure	Tag	Style	English	Chinese	GlossaryKey
+dpabi	pushbuttonGradientAnalysis	pushbutton	Gradient Analysis	梯度分析	
+dpabi	pushbuttonDPABIDICOMSorted	pushbutton	DPABI DICOM Sorter	DPABI DICOM 排序	
+dpabi	pushbuttonHarmonization	pushbutton	Harmonization	数据协调化	
+dpabi	pushbuttonDPABIFiber	pushbutton	DPABIFiber 2.1	DPABIFiber 2.1	
+dpabi	pushbuttonDPABINet	pushbutton	DPABINet 2.0	DPABINet 2.0	
+dpabi	pushbuttonBrainImageNet	pushbutton	BrainImageNet	BrainImageNet	
+dpabi	pushbuttonAnalysis	pushbutton	Dynamic & Stability Analyses	动态与稳定性分析	
+dpabi	pushbutton_RfMRIMaps	pushbutton	The R-fMRI Maps Project	R-fMRI 图谱计划	
+dpabi	pushbutton_Utilities	pushbutton	Utilities	工具	
+dpabi	pushbutton_Viewer	pushbutton	Viewer	查看器	
+dpabi	pushbuttonStats	pushbutton	Statistical Analysis	统计分析	
+dpabi	pushbutton_Standardization	pushbutton	Standardization	标准化	
+dpabi	pushbutton_QC	pushbutton	Quality Control	质量控制	
+dpabi	pushbutton_DPABISurf	pushbutton	DPABISurf 3.4	DPABISurf 3.4	
+dpabi	pushbutton_DPARSFmain	pushbutton	DPARSF 5.5	DPARSF 5.5	
+DPARSF_main	pushbutton_DPARSFRat	pushbutton	DPARSF for Rat Data	DPARSF 大鼠数据	
+DPARSF_main	pushbutton_VBM	pushbutton	VBM	VBM 分析	
+DPARSF_main	pushbutton_TfMRIPreprocessing	pushbutton	Preprocessing for Task fMRI Data	任务态 fMRI 预处理	
+DPARSF_main	pushbutton_DPARSFMonkey	pushbutton	DPARSF for Monkey Data	DPARSF 猕猴数据	
+DPARSF_main	pushbutton_DPARSFB	pushbutton	DPARSF Basic Edition	DPARSF 基础版	
+DPARSF_main	pushbutton_DPARSFA	pushbutton	DPARSF Advanced Edition	DPARSF 高级版	
+DPARSFA	checkboxBIDStoDPARSF	checkbox	BIDS to DPARSF	BIDS 转 DPARSF	IsBIDStoDPARSF
+DPARSFA	pushbuttonFieldMapCorrection	pushbutton	FieldMap Correction	FieldMap 校正	
+DPARSFA	checkboxCovremoveIsAddMeanBack	checkbox	Add mean back	加回均值	Covremove.IsAddMeanBack
+DPARSFA	checkboxSmoothBeforeVMHC	checkbox	Smooth	先平滑	IsSmoothBeforeVMHC
+DPARSFA	checkboxT1CoregisterToFun	checkbox	T1 Coreg to Fun	T1 配准到功能像	IsNeedT1CoregisterToFun
+DPARSFA	checkboxCovremoveWhiteMatter	checkbox	White matter signal	白质信号	Covremove.WM.IsRemove
+DPARSFA	pushbutton_NuisanceSetting	pushbutton	Nuisance regressors (WM, CSF, Global)	协变量回归（白质/脑脊液/全脑）	
+DPARSFA	checkbox_IsBet	checkbox	Bet	去颅	IsBet
+DPARSFA	radiobuttonDerivative12	radiobutton	Derivative 12	导数 12	Covremove.HeadMotion
+DPARSFA	checkboxCalVMHC	checkbox	VMHC	VMHC	IsCalVMHC
+DPARSFA	checkboxSmoothReHo	checkbox	Smooth ReHo	平滑 ReHo	CalReHo.SmoothReHo
+DPARSFA	checkboxNormalizeToSymmetricGroupT1Mean	checkbox	Normalize to Symmetric Template	标准化到对称模板	IsNormalizeToSymmetricGroupT1Mean
+DPARSFA	checkboxSmoothResults	checkbox	Smooth Derivatives	平滑衍生指标	IsSmooth
+DPARSFA	checkboxNormalizeResults	checkbox	Normalize Derivatives	标准化衍生指标	Normalize.Timing
+DPARSFA	editParallelWorkersNumber	edit			ParallelWorkersNumber
+DPARSFA	text37	text	Parallel Workers #:	并行进程数:	ParallelWorkersNumber
+DPARSFA	checkboxCWAS	checkbox	CWAS	CWAS	IsCWAS
+DPARSFA	checkboxCalDegreeCentrality	checkbox	Degree Centrality	度中心性（DC）	IsCalDegreeCentrality
+DPARSFA	checkboxScrubbing	checkbox	Scrubbing	头动剔除	IsScrubbing
+DPARSFA	checkboxCovremoveAfterNormalize	checkbox	Nuisance Covariates Regression	协变量回归	IsCovremove
+DPARSFA	checkboxFilter_AfterNormalize	checkbox	Filter	滤波	IsFilter
+DPARSFA	editPolynomialTrend	edit			Covremove.PolynomialTrend
+DPARSFA	textPolynomialTrend	text	Polynomial trend:	多项式趋势:	Covremove.PolynomialTrend
+DPARSFA	radiobuttonVoxelSpecific12	radiobutton	Voxel-specific 12	体素特异 12	Covremove.HeadMotion
+DPARSFA	radiobuttonFriston24	radiobutton	Friston 24	Friston 24	Covremove.HeadMotion
+DPARSFA	radiobuttonRigidBody6	radiobutton	Rigid-body 6	刚体 6	Covremove.HeadMotion
+DPARSFA	textHeadMotionModel	text	Head Motion model:	头动模型:	Covremove.HeadMotion
+DPARSFA	txtfAlffBandSep	text	~		
+DPARSFA	txtBandSep	text	~		
+DPARSFA	checkboxCalVoxelSpecificHeadMotion	checkbox	Voxel-Specific Head Motion	体素特异头动指标	IsCalVoxelSpecificHeadMotion
+DPARSFA	text33	text	Functional Sessions #:	功能像 Session 数:	FunctionalSessionNumber
+DPARSFA	text30	text	Starting Directory Name:	起始目录名:	StartingDirName
+DPARSFA	text29	text	A		
+DPARSFA	text28	text	Advanced Edition	高级版	
+DPARSFA	textAffineRegularisation	text	Affine Regularisation in Segmentation:	分割中的仿射正则化:	Segment.AffineRegularisationInSegmentation
+DPARSFA	textFWHM	text	FWHM:	FWHM:	Smooth.FWHM
+DPARSFA	pushbuttonRun	pushbutton	Run	运行	
+DPARSFA	pushbuttonQuit	pushbutton	Quit	退出	
+DPARSFA	pushbuttonUtilities	pushbutton	Utilities	工具	
+DPARSFA	pushbuttonLoad	pushbutton	Load	载入	
+DPARSFA	pushbuttonSave	pushbutton	Save	保存	
+DPARSFA	pushbuttonHelp	pushbutton	Help	帮助	
+DPARSFA	checkbox_IsAutoMask	checkbox	AutoMask	自动脑掩膜	IsAutoMask
+DPARSFA	editStartingDirName	edit			StartingDirName
+DPARSFA	editFunctionalSessionNumber	edit			FunctionalSessionNumber
+DPARSFA	checkboxWarpMasksIntoIndividualSpace	checkbox	Warp Masks into Individual Space	掩膜反算到个体空间	IsWarpMasksIntoIndividualSpace
+DPARSFA	checkboxDefineROIInteractively	checkbox	Define ROI Interactively*	交互式定义 ROI*	IsDefineROIInteractively
+DPARSFA	pushbuttonDefineROI	pushbutton	Define ROI	定义 ROI	IsDefineROIInteractively
+DPARSFA	checkboxExtractRESTdefinedROITC	checkbox	Extract ROI time courses	提取 ROI 时间序列	IsExtractROISignals
+DPARSFA	checkboxCalFC	checkbox	Functional Connectivity	功能连接（FC）	IsCalFC
+DPARSFA	checkboxOtherCovariates	checkbox	Other covariates	其他协变量	Covremove.OtherCovariatesROI
+DPARSFA	checkboxCovremoveCSF	checkbox	CSF signal	CSF 信号	Covremove.CSF.IsRemove
+DPARSFA	checkboxCovremoveWholeBrain	checkbox	Global signal	全脑信号	Covremove.WholeBrain.IsRemove
+DPARSFA	checkboxHeadMotionScrubbingRegressors	checkbox	Head motion scrubbing regressors	头动 Scrubbing 回归量	Covremove.IsHeadMotionScrubbingRegressors
+DPARSFA	checkboxCovremoveAfterRealign	checkbox	Nuisance Covariates Regression	协变量回归	IsCovremove
+DPARSFA	textReHoCluster	text	Cluster:	邻域:	CalReHo.ClusterNVoxel
+DPARSFA	textVoxSize	text	Voxel Size:	体素大小:	Normalize.VoxSize
+DPARSFA	textBoundingBox	text	Bounding Box:	包围盒:	Normalize.BoundingBox
+DPARSFA	textReferenceSlice	text	Reference Slice:	参考层:	SliceTiming.ReferenceSlice
+DPARSFA	textSliceOrder	text	Slice Order:	层顺序:	SliceTiming.SliceOrder
+DPARSFA	textSliceNumber	text	Slice Number:	层数:	SliceTiming.SliceNumber
+DPARSFA	textTR	text	TR (s):	TR(秒):	TR
+DPARSFA	textTimepoints	text	Time Points:	时间点数:	TimePoints
+DPARSFA	textSubjects	text	Participants:	受试者:	SubjectID
+DPARSFA	txtDPARSF	text	DPARSF	DPARSF	
+DPARSFA	txtfAlffBand	text	Band (Hz):	频段(Hz):	CalALFF.AHighPass_LowCutoff
+DPARSFA	radiobuttonReHo27voxels	radiobutton	27 voxels	27 体素	CalReHo.ClusterNVoxel
+DPARSFA	radiobuttonReHo19voxels	radiobutton	19		CalReHo.ClusterNVoxel
+DPARSFA	radiobuttonReHo7voxels	radiobutton	7		CalReHo.ClusterNVoxel
+DPARSFA	checkboxCalReHo	checkbox	ReHo	ReHo	IsCalReHo
+DPARSFA	edtBandHigh	edit	0.08		Filter.ALowPass_HighCutoff
+DPARSFA	edtBandLow	edit	0.01		Filter.AHighPass_LowCutoff
+DPARSFA	checkboxFilter_BeforeNormalize	checkbox	Filter (Hz):	滤波(Hz):	IsFilter
+DPARSFA	edtfAlffBandHigh	edit	0.08		CalALFF.ALowPass_HighCutoff
+DPARSFA	edtfAlffBandLow	edit	0.01		CalALFF.AHighPass_LowCutoff
+DPARSFA	checkboxCalALFF	checkbox	ALFF+fALFF	ALFF+fALFF	IsCalALFF
+DPARSFA	checkboxDetrend	checkbox	Detrend	去趋势	IsDetrend
+DPARSFA	btnSelectMask	pushbutton	...		MaskFile
+DPARSFA	edtMaskfile	edit			MaskFile
+DPARSFA	rbtnUserMask	radiobutton	User-defined mask	自定义掩膜	MaskFile
+DPARSFA	rbtnNullMask	radiobutton	No mask	无掩膜	MaskFile
+DPARSFA	rbtnDefaultMask	radiobutton	Default mask	默认掩膜	MaskFile
+DPARSFA	editFWHM	edit			Smooth.FWHM
+DPARSFA	checkboxSmoothByDARTEL	checkbox	Smooth by DARTEL	DARTEL 平滑	IsSmooth
+DPARSFA	checkboxSmooth	checkbox	Smooth	平滑	IsSmooth
+DPARSFA	radiobuttonNormalize_DARTEL	radiobutton	Normalize by DARTEL	DARTEL 标准化	IsNormalize
+DPARSFA	radiobuttonNormalize_T1	radiobutton	Normalize by using T1 image unified segmentation	T1 统一分割标准化	IsNormalize
+DPARSFA	radiobuttonNormalize_EPI	radiobutton	Normalize by using EPI templates	EPI 模板标准化	IsNormalize
+DPARSFA	editVoxSize	edit			Normalize.VoxSize
+DPARSFA	editBoundingBox	edit			Normalize.BoundingBox
+DPARSFA	checkboxNormalize	checkbox	Normalize	标准化	IsNormalize
+DPARSFA	radiobuttonEuropean	radiobutton	European	欧美人群	Segment.AffineRegularisationInSegmentation
+DPARSFA	radiobuttonEastAsian	radiobutton	East Asian	东亚人群	Segment.AffineRegularisationInSegmentation
+DPARSFA	checkboxNewSegment_DARTEL	checkbox	New Segment + DARTEL	新分割 + DARTEL	IsDARTEL
+DPARSFA	checkboxSegment	checkbox	Segment	分割	IsSegment
+DPARSFA	checkboxReorientInteractivelyAfterCoreg	checkbox	Reorient after Coreg*	配准后调整原点*	IsNeedReorientInteractivelyAfterCoreg
+DPARSFA	checkboxReorientT1ImgInteractively	checkbox	Reorient T1*	T1 原点调整*	IsNeedReorientT1ImgInteractively
+DPARSFA	checkboxReorientCropT1Img	checkbox	Crop T1	裁剪去颈	IsNeedReorientCropT1Img
+DPARSFA	checkboxT1DICOM2NIFTI	checkbox	T1 DICOM to NIFTI	T1 DICOM 转 NIfTI	IsNeedConvertT1DCM2IMG
+DPARSFA	checkboxReorientFunImgInteractively	checkbox	Reorient Fun*	调整功能像*	IsNeedReorientFunImgInteractively
+DPARSFA	checkboxRealign	checkbox	Realign	头动校正	IsRealign
+DPARSFA	editReferenceSlice	edit			SliceTiming.ReferenceSlice
+DPARSFA	editSliceOrder	edit			SliceTiming.SliceOrder
+DPARSFA	editSliceNumber	edit			SliceTiming.SliceNumber
+DPARSFA	checkboxSliceTiming	checkbox	Slice Timing	时间层校正	IsSliceTiming
+DPARSFA	editRemoveFirstTimePoints	edit	10		RemoveFirstTimePoints
+DPARSFA	checkboxRemoveFirstTimePoints	checkbox	Remove First	去除初始点	IsRemoveFirstTimePoints
+DPARSFA	checkboxApplyDownloadedReorientMats	checkbox	Apply Mats	应用矩阵	IsApplyDownloadedReorientMats
+DPARSFA	ckboxEPIDICOM2NIFTI	checkbox	EPI DICOM to NIFTI	EPI DICOM 转 NIfTI	IsNeedConvertFunDCM2IMG
+DPARSFA	popupmenuTemplateParameters	popupmenu	Template Parameters	模板参数	
+DPARSFA	editTR	edit	2		TR
+DPARSFA	editTimePoints	edit			TimePoints
+DPARSFA	listSubjectID	listbox		受试者列表	SubjectID
+DPARSFA	btnSelectWorkingDir	pushbutton	...		WorkingDir
+DPARSFA	txtWorkingDir	text	Working Directory:	工作目录:	WorkingDir
+DPARSFA	txtDPARSF_all	text	Data Processing Assistant for Resting-State fMRI	静息态功能磁共振数据处理助手	
+DPARSFA	edtWorkingDir	edit			WorkingDir
+DPARSFA	textRemoveFirstTimePointsPart2	text	Time Points	时间点	IsRemoveFirstTimePoints
+DPARSFA	radiobuttonVoxelSpecific3	radiobutton	Voxel-specific 3	体素特异 3	Covremove.HeadMotion
+DPARSF_ChooseGUI	pushbuttonAdvanced	pushbutton	DPARSF Advanced Edition	DPARSF 高级版	
+DPARSF_ChooseGUI	pushbuttonBasic	pushbutton	DPARSF Basic Edition	DPARSF 基础版	
+DPARSF_FieldMap	Data2	radiobutton	Phase1 + Phase2 + Magnitude1 + Magnitude2	相位1 + 相位2 + 幅值1 + 幅值2	
+DPARSF_FieldMap	Data1	radiobutton	PhaseDiff + Magnitude1 [+ Magnitude2]	相位差 + 幅值1 [+ 幅值2]	
+DPARSF_FieldMap	Data	text	Data Format	数据格式	
+DPARSF_FieldMap	VDM	checkbox	Calculate Voxel Displacement Map (VDM)	计算体素位移图（VDM）	
+DPARSF_FieldMap	If_EPIBased	checkbox	EPI-Based Field Map	EPI 基础场图	
+DPARSF_FieldMap	AcceptButton	pushbutton	Accept	接受	
+DPARSF_FieldMap	If_ApplyCorrection	checkbox	Apply Field Map Correction in Realign & Unwarp	在头动校正与去畸变中应用场图校正	
+DPARSF_FieldMap	LongTimeComments	text	s (0 for reading from json)	秒（0 表示从 json 读取）	
+DPARSF_FieldMap	ShortTimeComments	text	s (0 for reading from json)	秒（0 表示从 json 读取）	
+DPARSF_FieldMap	LongTimeInput	edit	0		
+DPARSF_FieldMap	LongTime	text	Echo Time 2 (Long)	回波时间 2（长）	
+DPARSF_FieldMap	ShortTimeInput	edit	0		
+DPARSF_FieldMap	ShortTime	text	Echo Time 1 (Short)	回波时间 1（短）	
+DPARSF_FieldMap	DICOM2NIFTI	checkbox	DICOM to NIFTI	DICOM 转 NIfTI	
+DPARSF_NuisanceSetting	CancelButton	pushbutton	Cancel	取消	
+DPARSF_NuisanceSetting	AcceptButton	pushbutton	Accept	接受	
+DPARSF_NuisanceSetting	text8	text	Method	方法	
+DPARSF_NuisanceSetting	WholeBrainMaskPopup	popupmenu	SPM apriori | Automask	全脑掩膜来源	Covremove.WholeBrain.Mask
+DPARSF_NuisanceSetting	WholeBrainMethodPopup	text	Mean		Covremove.WholeBrain.Method
+DPARSF_NuisanceSetting	text7	text	Mask	掩膜	
+DPARSF_NuisanceSetting	WholeBrainButton	checkbox	Global Signal	全脑信号	Covremove.WholeBrain.IsRemove
+DPARSF_NuisanceSetting	checkboxBothWithWithoutGSR	checkbox	Both with & without GSR	有/无 GSR	
+DPARSF_NuisanceSetting	edit_PCNumber	edit	5		Covremove.WM.CompCorPCNum
+DPARSF_NuisanceSetting	text10	text	PC Number	主成分数	Covremove.WM.CompCorPCNum
+DPARSF_NuisanceSetting	CSFThrdEntry	edit	0.99		Covremove.CSF.MaskThreshold
+DPARSF_NuisanceSetting	CSFMaskPopup	popupmenu	SPM apriori | Segment	脑脊液掩膜来源	Covremove.CSF.Mask
+DPARSF_NuisanceSetting	CSFButton	checkbox	CSF	脑脊液	Covremove.CSF.IsRemove
+DPARSF_NuisanceSetting	MethodPopup	popupmenu	Mean (WM, CSF, Seperately) | CompCor	提取方法	Covremove.WM.Method
+DPARSF_NuisanceSetting	text5	text	Method	方法	
+DPARSF_NuisanceSetting	WMThrdEntry	edit	0.99		Covremove.WM.MaskThreshold
+DPARSF_NuisanceSetting	MaskLab	text	Mask	掩膜	
+DPARSF_NuisanceSetting	WMMaskPopup	popupmenu	SPM apriori | Segment	白质掩膜来源	Covremove.WM.Mask
+DPARSF_NuisanceSetting	CovLab	text	Covariates	协变量	
+DPARSF_NuisanceSetting	WMButton	checkbox	White Matter	白质	Covremove.WM.IsRemove
+DPARSF_ROI_Template	checkboxMultiLabel	checkbox	Multiple Labels in mask file	掩膜文件含多标签	
+DPARSF_ROI_Template	pushbuttonOtherROI	pushbutton	Define Other ROIs	定义其他 ROI	
+DPARSF_ROI_Template	pushbuttonHOA	pushbutton	Harvard-Oxford atlas	Harvard-Oxford 图谱	
+DPARSF_ROI_Template	pushbuttonAAL	pushbutton	AAL atlas	AAL 图谱	
+DPARSF_ROI_Template	pushbuttonCC200	pushbutton	Craddock's 200 clustering ROIs	Craddock 200 聚类 ROI	
+DPARSF_ROI_Template	pushbuttonDMNROI	pushbutton	Andrews-Hanna's DMN ROIs	Andrews-Hanna DMN 网络 ROI	
+DPARSF_ROI_Template	pushbuttonDos160	pushbutton	Dosenbach's 160 functional ROIs	Dosenbach 160 功能 ROI	
+DPARSF_ScrubbingSetting_gui	radiobuttonFD_Jenkinson	radiobutton	FD (Jenkinson)	FD（Jenkinson 法）	
+DPARSF_ScrubbingSetting_gui	radiobuttonFD_Power	radiobutton	FD (Power)	FD（Power 法）	
+DPARSF_ScrubbingSetting_gui	text13	text	FD type:	FD 类型：	Scrubbing.FDType
+DPARSF_ScrubbingSetting_gui	editLaterPoints	edit			Scrubbing.LaterPoints
+DPARSF_ScrubbingSetting_gui	editPreviousPoints	edit			Scrubbing.PreviousPoints
+DPARSF_ScrubbingSetting_gui	text12	text	FD threshold for "bad" time points:	“坏点”FD 阈值：	Scrubbing.FDThreshold
+DPARSF_ScrubbingSetting_gui	text11	text	Scrubbing time points after "bad" time points:	“坏点”之后扩展时间点数：	Scrubbing.LaterPoints
+DPARSF_ScrubbingSetting_gui	rtnM5	radiobutton	Piecewise Cubic Hermite	分段三次 Hermite	Scrubbing.ScrubbingMethod
+DPARSF_ScrubbingSetting_gui	rtnM4	radiobutton	Cubic Spline	三次样条	Scrubbing.ScrubbingMethod
+DPARSF_ScrubbingSetting_gui	rtnM2	radiobutton	Nearest Neighbor	最近邻	Scrubbing.ScrubbingMethod
+DPARSF_ScrubbingSetting_gui	rtnM3	radiobutton	Linear	线性	Scrubbing.ScrubbingMethod
+DPARSF_ScrubbingSetting_gui	rtnM1	radiobutton	Cut (delete)	剔除	Scrubbing.ScrubbingMethod
+DPARSF_ScrubbingSetting_gui	textScrubbingMethod	text	Scrubbing Method (Interpolation):	坏点处理方式（插值）：	Scrubbing.ScrubbingMethod
+DPARSF_ScrubbingSetting_gui	btnOK	pushbutton	OK	确定	
+DPARSF_ScrubbingSetting_gui	editFDThreshold	edit			Scrubbing.FDThreshold
+DPARSF_ScrubbingSetting_gui	text6	text	Scrubbing time points before "bad" time points:	“坏点”之前扩展时间点数：	Scrubbing.PreviousPoints
+DPARSF_ScrubbingSetting_gui	text2	text	Scrubbing Settings	头动剔除（Scrubbing）设置	
+ReorientThreQC	pushbuttonRun	pushbutton	OK	确定	
+ReorientThreQC	uipanel1	panel	Thresholding Quality	阈值化质量检查	
+ReorientThreQC	text3	text	>=		
+ReorientThreQC	text2	text	>=		
+ReorientThreQC	editFun	edit			
+ReorientThreQC	editT1	edit			
+ReorientThreQC	checkboxFun	checkbox	Fun Score  (1-5)	功能像评分（1-5）	
+ReorientThreQC	checkboxT1	checkbox	T1 Score  (1-5)	T1 评分（1-5）	

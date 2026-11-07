@@ -1,0 +1,60 @@
+{
+  "name": "dsh-mri-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "DSH plugin: MRI resting-state workbench in the Harness Web UI - scan/index datasets, prepare and validate DPARSF configurations, run DPABI/DPARSFA preprocessing in background MATLAB, and follow live progress in native Jobs. Bundles the standalone MATLAB GUI workbench under matlab/MRI_Workbench.",
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "matlab",
+    "dpabi",
+    "dparsf",
+    "mri",
+    "fmri",
+    "resting-state",
+    "qc"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ezerruier/dsh-mri-workbench.git"
+  },
+  "homepage": "https://github.com/Ezerruier/dsh-mri-workbench#readme",
+  "bugs": {
+    "url": "https://github.com/Ezerruier/dsh-mri-workbench/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": "./index.mjs",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.mjs",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "docs/*"
+  ],
+  "scripts": {
+    "check": "node --check index.mjs && node --check client.js",
+    "test": "node tests/node/run-all.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": ["@deepseek-ai/dsh-client-ui-conversation"]
+    }
+  }
+}

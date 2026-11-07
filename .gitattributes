@@ -1,0 +1,10 @@
+# Default: normalize line endings on commit, check out platform-native.
+* text=auto
+
+# Test fixtures must stay byte-identical: they intentionally contain UTF-8 BOM,
+# GBK and CRLF samples used by the manual-QC parsers. Never normalize them.
+tests/node/fixtures/** -text
+
+# Binary assets
+*.png binary
+*.svg text

@@ -1,0 +1,62 @@
+{
+  "subjectIDs": ["Sub01", "Sub02", "Sub03", "Sub04", "Sub10"],
+  "qcFiles": {
+    "t1": {
+      "relativePath": "QC/RawT1ImgQC.tsv",
+      "encoding": "utf8bom",
+      "eol": "\r\n",
+      "lines": [
+        "Subject ID\tQC Score\tQC Comment",
+        "Sub01\t5\t图像清晰，无伪影",
+        "Sub02\t2\t轻微运动伪影，建议复核",
+        "Sub03\tNaN\t",
+        "Sub04\t4\t灰白质对比良好",
+        "Sub10\t3\t配准可接受"
+      ]
+    },
+    "fun": {
+      "relativePath": "QC/RawFunImgQC.tsv",
+      "encoding": "gbk",
+      "eol": "\r\n",
+      "lines": [
+        "Subject ID\tQC Score\tQC Comment",
+        "Sub01\t4\t功能平均像正常",
+        "Sub02\t1\t信号丢失严重",
+        "Sub03\tNaN\t",
+        "Sub04\t3\t可接受",
+        "Sub10\t2\t伪影明显"
+      ]
+    },
+    "norm": {
+      "relativePath": "QC/NormalizationQC.tsv",
+      "encoding": "utf8",
+      "eol": "\n",
+      "lines": [
+        "Subject ID\tQC Score\tQC Comment"
+      ]
+    }
+  },
+  "headMotion": {
+    "relativePath": "RealignParameter/HeadMotion.tsv",
+    "header": [
+      "Subject ID",
+      "max(abs(Tx))", "max(abs(Ty))", "max(abs(Tz))",
+      "max(abs(Rx))", "max(abs(Ry))", "max(abs(Rz))",
+      "mean(abs(Tx))", "mean(abs(Ty))", "mean(abs(Tz))",
+      "mean(abs(Rx))", "mean(abs(Ry))", "mean(abs(Rz))",
+      "mean RMS", "mean relative RMS (mean FD_VanDijk)", "mean FD_Power",
+      "Number of FD_Power>0.5", "Percent of FD_Power>0.5",
+      "Number of FD_Power>0.2", "Percent of FD_Power>0.2",
+      "mean FD_Jenkinson"
+    ],
+    "rows": [
+      { "id": "Sub01", "meanFD": "5.000000e-02" },
+      { "id": "Sub02", "meanFD": "3.500000e-01" },
+      { "id": "Sub03", "meanFD": "1.200000e-01" },
+      { "id": "Sub04", "meanFD": "2.200000e-01" },
+      { "id": "Sub10", "meanFD": "8.000000e-02" }
+    ]
+  },
+  "thresholdsJson": "{\"T1Min\":4,\"FunMin\":3,\"NormMin\":3,\"UseT1\":true,\"UseFun\":true,\"UseNorm\":true,\"MaxMeanFD\":0.3,\"UseMeanFD\":true}",
+  "sample3SubjectDirs": ["FunRaw/Sub01"]
+}

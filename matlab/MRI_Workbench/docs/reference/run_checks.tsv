@@ -1,0 +1,23 @@
+Id	检查项	触发条件	实际行为	源码依据	实验验证	Runner 建议动作
+1	WorkingDir/DataProcessDir 不存在	进入第一个需要 cd 的已启用步骤	抛 MATLAB:cd:NonExistentFolder（硬错误，MATLAB 退出码 1）	DPARSFA_run.m:259,550,630,692,961 等 60+ 处 cd()	实验 A 已复现	启动前 isfolder() 校验，缺失即拒绝
+2	SubjectID 为空	SubjectID={}	不报错；打印 "Congratulations..."，返回空 Error（静默空跑）	DPARSFA_run.m:59,5126	实验 C 已复现	启动前校验 SubjectID 非空、目录存在
+3	TR=0 且 NIfTI 头无 timing.tspace	TR==0 且 StartingDirName 不是 T1Raw/T1Img	error('Can NOT retrieve the TR information from the NIfTI images')（无 identifier，硬错误）	DPARSFA_run.m:512-563	实验 B 已复现	启动前读每个功能像 pixdim[4]；为 0/NaN 时要求用户填 TR
+4	TR=0 且头有 timing.tspace	同上	自动填 TRSet 并写 TRInfo.tsv	DPARSFA_run.m:544-621	实验 t6b 已复现（TRSet=2.5，TRInfo.tsv 正确）	可直接支持“自动读取 TR”
+5	TRInfo.tsv 已存在但缺当前被试	TR==0 且 <WorkDir>/TRInfo.tsv 存在	error('The subject ID ... was not found in TRInfo.tsv!')	DPARSFA_run.m:515-537	未实测（代码明确）	启动前若 TR=0 且 TRInfo.tsv 存在，检查被试覆盖或先删除该文件
+6	SliceOrderInfo.tsv 被试不匹配	TR 块之后、SliceTiming 且 SliceNumber=0 时	error('The subject ID ... doesn''t match ...')	DPARSFA_run.m:745-747	未实测（代码明确）	启动前校验 SliceOrderInfo.tsv 行顺序与被试一致
+7	SliceOrderInfo.tsv 中 slice order 无法解析	同上，且值不是 IA/IA2/ID/ID2/SA/SD 也不是可 load 的文件	error('The specified slice order definition ... is not supported!')	DPARSFA_run.m:749-769	未实测（代码明确）	启动前解析该列，白名单校验
+8	SliceOrder 长度 != SliceNumber	IsSliceTiming=1 且长度不符	SPM 抛 matlabbatch:run:jobfailederr（"Mismatch between number of slices and length of 'sliceorder' vector."）	DPARSFA_run.m:787-788 → spm_slice_timing.m:134	实验 E 已复现	启动前 len(SliceOrder)==SliceNumber 校验
+9	T1Img/<subj> 缺失但启用了 T1 步骤	IsBet / IsNeedT1CoregisterToFun / IsSegment / IsDARTEL 任一为真	在 cd(DataProcessDir/T1Img/<subj>) 处抛 MATLAB:cd:NonExistentFolder	DPARSFA_run.m:1726,2159,2389	实验 D 已复现	启动前按启用的步骤检查 T1Img / T1ImgCoreg / T1ImgNewSegment 产物
+10	T1Img 存在但无 c*/co*/*Crop* 且只有 1 个 T1	启用 IsBet / IsNeedT1CoregisterToFun / IsSegment / IsApplyDownloadedReorientMats	questdlg 弹出确认“是否用无 co 的 T1”；-batch 非交互模式下 questdlg 直接抛错（"当 MATLAB 处于非交互或禁用窗口显示的配置中时，不支持创建阻止执行的对话框"）	DPARSFA_run.m:435,1641,1752,2186,1239	实验 t5 已复现（在 1752 行报错）	启动前检查每被试 T1 文件是否恰好 1 个 c*/co*/*Crop*；否则建议 IsNeedReorientCropT1Img=1 或 IsBIDStoDPARSF=1
+11	T1Img 存在但 T1 文件多于 1 个	同上	errordlg（headless 下同样是硬错误）	DPARSFA_run.m:445,1249,1651,1762,2196	未实测（代码明确）	启动前要求 T1Img/<subj> 内只保留一个 T1 文件
+12	TimePoints>0 且与实际时间点数不符	RemoveFirstTimePoints/切片/realign/标准化/平滑前	写 Error cell（如 'Error in Realign, time point number doesn''t match: S01'），该步骤仍执行完，随后 if ~isempty(Error) → disp(Error); return（不抛异常，MATLAB 退出码可能为 0）	DPARSFA_run.m:635-682,706-682,975,1154-1157,3048-3311	未实测（代码明确）	启动前比对 TimePoints 与实际文件/4D 维数；解析日志时同时检查 "Error in " 行
+13	SPM 作业失败（realign/slice timing/normalize/smooth/DARTEL/coreg）	任意 spm_jobman('run') 失败	抛 matlabbatch:run:jobfailederr（未捕获）	DPARSFA_run.m:800,1003,1931,2314/2370（分割另有 catch）,3153-3231,3358,3426,4827-5097	实验 E 已复现	捕获 MATLAB 退出码≠0 + 日志中的 "Job execution failed"
+14	分割失败	spm_jobman 在分割步骤抛异常	先 fprintf 具体被试，再 error('Error detected during segmentation, please read the above information carefully!')	DPARSFA_run.m:2313-2319,2369-2375	未实测（代码明确）	日志解析 "This subject failed segmentation: <ID>"
+15	T1ImgNewSegment 缺失但 IsDARTEL=1	cd(DataProcessDir/T1ImgNewSegment)	MATLAB:cd:NonExistentFolder	DPARSFA_run.m:2389	未实测（代码明确）	启动前检查 IsDARTEL→T1ImgNewSegment 存在且每被试有 rc1*/rc2*/u_*/Template_6.*
+16	IsNormalize=2 但无 T1ImgSegment/*seg_sn.mat	Normalize OnFunctionalData/OnResults	dir() 为空后 DirImg(1) 抛 "Index exceeds the number of array elements"	DPARSFA_run.m:2465-2466,3134-3135,4834-4835	未实测（代码明确）	启动前检查分割产物
+17	IsNormalize=3 且缺 Template_6.*	同上	DirImg(1) 索引越界	DPARSFA_run.m:3162-3169,4861-4868	未实测（代码明确）	启动前检查 SubjectID{1} 的 T1ImgNewSegment 下 Template_6.*
+18	MaskFile 用户路径不存在	计算指标/回归时 y_Read	底层读文件报错（无友好提示）	DPARSFA_run.m:3573-3631	未实测	启动前 isfile() 校验
+19	CalFC.ROIDef 中路径不存在	y_SCA / y_ExtractROISignal	底层报错	DPARSFA_run.m:4412-4461	未实测	启动前逐个 isfile() 校验
+20	IsAllowGUI 传入字符串 '0'	非 isdeployed 的 MATLAB	变量变成 char '0'（真值 48），GUI 分支仍会执行	DPARSFA_run.m:51-56	实验 t2b 已复现	Runner 强制传数值 0 或直接写 Cfg.IsAllowGUI=0
+21	.mat 文件内部变量名不是 Cfg	DPARSFA_run(<path>)	load 后 AutoDataProcessParameter=Cfg 抛 MATLAB:UndefinedFunction "函数或变量 'Cfg' 无法识别"	DPARSFA_run.m:34-37	实验 t2 已复现（反向证据）	Runner 保存时固定 save(...,'Cfg')
+22	段错误/崩溃后中间状态	进程被杀或断电	无锁文件、无状态文件；重跑会覆盖同名产物	全文无状态写入	—	Runner 自行维护 status.json；重跑建议指定 StartingDirName 续跑

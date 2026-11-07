@@ -1,0 +1,28 @@
+# ---- Node / DSH plugin ----
+node_modules/
+
+# Runtime state written by the plugin into the DSH workspace
+# (scan index, prepared Cfg.mat/state.json, run logs, QC viewer state)
+.mri-workbench/
+
+# ---- MATLAB workbench runtime output ----
+matlab/MRI_Workbench/logs/*
+!matlab/MRI_Workbench/logs/.gitkeep
+matlab/MRI_Workbench/runs/*
+!matlab/MRI_Workbench/runs/.gitkeep
+
+# ---- Test artifacts ----
+tests/**/out/
+tests/**/tmp_*/
+tests/node/**/.tmp/
+*.log
+
+# ---- Editors / OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
+*.bak
+*.bak-*
+
+# ---- Local-only settings ----
+matlab/MRI_Workbench/config/settings.local.json

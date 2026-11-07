@@ -1,0 +1,19 @@
+{
+  "DpabiRoot": "",
+  "SpmRoot": "",
+  "LastDataRoot": "",
+  "LastRunRoot": "",
+  "AutoDetectPaths": [
+    "D:\\Software\\DPABI",
+    "C:\\Software\\DPABI",
+    "D:\\Program Files\\MATLAB\\DPABI",
+    "D:\\DPABI"
+  ],
+  "NativePatch": true,
+  "ShowAdvanced": false,
+  "ScanMaxDepth": 6,
+  "AllowGUI": false,
+  "Language": "zh",
+  "RecentRuns": [],
+  "Version": 1
+}

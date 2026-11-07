@@ -1,0 +1,99 @@
+Source	Tag	Style	String	CfgPath	置信度	依据
+DPARSFA.fig	edtWorkingDir	edit		WorkingDir / DataProcessDir	高	同名；GUI 保存后 Cfg.WorkingDir 生效
+DPARSFA.fig	btnSelectWorkingDir	pushbutton	...	WorkingDir	高	目录选择按钮
+DPARSFA.fig	listSubjectID	listbox		SubjectID	高	GUI 列出 WorkingDir 下被试目录
+DPARSFA.fig	editTR	edit	2	TR	高	DPARSF.fig 默认值即 2
+DPARSFA.fig	editTimePoints	edit		TimePoints	高	—
+DPARSFA.fig	editFunctionalSessionNumber	edit		FunctionalSessionNumber	高	—
+DPARSFA.fig	editStartingDirName	edit		StartingDirName	高	—
+DPARSFA.fig	editParallelWorkersNumber	edit		ParallelWorkersNumber	高	—
+DPARSFA.fig	ckboxEPIDICOM2NIFTI	checkbox	EPI DICOM to NIFTI	IsNeedConvertFunDCM2IMG	高	—
+DPARSFA.fig	checkboxT1DICOM2NIFTI	checkbox	T1 DICOM to NIFTI	IsNeedConvertT1DCM2IMG	高	—
+DPARSFA.fig	checkboxReorientCropT1Img	checkbox	Crop T1	IsNeedReorientCropT1Img	高	—
+DPARSFA.fig	checkboxApplyDownloadedReorientMats	checkbox	Apply Mats	IsApplyDownloadedReorientMats	高	—
+DPARSFA.fig	checkboxBIDStoDPARSF	checkbox	BIDS to DPARSF	IsBIDStoDPARSF	高	—
+DPARSFA.fig	checkboxRemoveFirstTimePoints	checkbox	Remove First	IsRemoveFirstTimePoints（仅 UI）	高	引擎不读该字段（DPARSFA_run 0 命中），真正生效的是 RemoveFirstTimePoints
+DPARSFA.fig	editRemoveFirstTimePoints	edit	10	RemoveFirstTimePoints	高	—
+DPARSFA.fig	checkboxSliceTiming	checkbox	Slice Timing	IsSliceTiming	高	—
+DPARSFA.fig	editSliceNumber	edit		SliceTiming.SliceNumber	高	tooltip 与源码 run:727 注释逐字相同
+DPARSFA.fig	editSliceOrder	edit		SliceTiming.SliceOrder	高	—
+DPARSFA.fig	editReferenceSlice	edit		SliceTiming.ReferenceSlice	高	—
+DPARSFA.fig	checkboxRealign	checkbox	Realign	IsRealign	高	—
+DPARSFA.fig	checkboxCalVoxelSpecificHeadMotion	checkbox	Voxel-Specific Head Motion	IsCalVoxelSpecificHeadMotion	高	—
+DPARSFA.fig	checkboxReorientFunImgInteractively	checkbox	Reorient Fun*	IsNeedReorientFunImgInteractively	高	—
+DPARSFA.fig	checkboxReorientT1ImgInteractively	checkbox	Reorient T1*	IsNeedReorientT1ImgInteractively	高	—
+DPARSFA.fig	checkboxReorientInteractivelyAfterCoreg	checkbox	Reorient after Coreg*	IsNeedReorientInteractivelyAfterCoreg	高	—
+DPARSFA.fig	checkboxT1CoregisterToFun	checkbox	T1 Coreg to Fun	IsNeedT1CoregisterToFun	高	—
+DPARSFA.fig	checkbox_IsBet	checkbox	Bet	IsBet	高	标签带下划线直接对应
+DPARSFA.fig	checkbox_IsAutoMask	checkbox	AutoMask	IsAutoMask	高	同上
+DPARSFA.fig	checkboxSegment	checkbox	Segment	IsSegment=1（旧分割）	中	推断：与 New Segment + DARTEL 互斥
+DPARSFA.fig	checkboxNewSegment_DARTEL	checkbox	New Segment + DARTEL	IsSegment=2 且 IsDARTEL=1	中	推断：源码 IsSegment=2 即 New Segment，DARTEL 单独开关
+DPARSFA.fig	radiobuttonEuropean	radiobutton	European	Segment.AffineRegularisationInSegmentation='mni'	中	推断：DPABI 文档 mni=European/eastern=East Asian
+DPARSFA.fig	radiobuttonEastAsian	radiobutton	East Asian	Segment.AffineRegularisationInSegmentation='eastern'	中	同上
+DPARSFA.fig	checkboxNormalize	checkbox	Normalize	IsNormalize>0	高	—
+DPARSFA.fig	radiobuttonNormalize_EPI	radiobutton	Normalize by using EPI templates	IsNormalize=1	高	源码 run:3093/4800 分支即 EPI 模板
+DPARSFA.fig	radiobuttonNormalize_T1	radiobutton	Normalize by using T1 image unified segmentation	IsNormalize=2	高	源码 run:3130/4830 分支即分割信息
+DPARSFA.fig	radiobuttonNormalize_DARTEL	radiobutton	Normalize by DARTEL	IsNormalize=3	高	源码 run:3153/4852 分支即 DARTEL
+DPARSFA.fig	editBoundingBox	edit		Normalize.BoundingBox	高	—
+DPARSFA.fig	editVoxSize	edit		Normalize.VoxSize	高	—
+DPARSFA.fig	checkboxNormalizeResults	checkbox	Normalize Derivatives	Normalize.Timing='OnResults'（与 OnFunctionalData 切换）	中	推断：GUI 两处 Normalize 复选框分别对应功能像/结果
+DPARSFA.fig	checkboxSmoothResults	checkbox	Smooth Derivatives	Smooth.Timing='OnResults'（与 OnFunctionalData 切换）	中	推断：同上
+DPARSFA.fig	checkboxSmooth	checkbox	Smooth	IsSmooth=1	高	—
+DPARSFA.fig	checkboxSmoothByDARTEL	checkbox	Smooth by DARTEL	IsSmooth=2	中	推断：源码 run:3363 注释即 "Smooth by DARTEL"
+DPARSFA.fig	editFWHM	edit		Smooth.FWHM	高	—
+DPARSFA.fig	rbtnDefaultMask	radiobutton	Default mask	MaskFile='Default'	高	—
+DPARSFA.fig	rbtnNullMask	radiobutton	No mask	MaskFile=''	高	—
+DPARSFA.fig	rbtnUserMask	radiobutton	User-defined mask	MaskFile=<用户在 edtMaskfile 的路径>	高	—
+DPARSFA.fig	edtMaskfile	edit		MaskFile	高	—
+DPARSFA.fig	checkboxDetrend	checkbox	Detrend	IsDetrend	高	—
+DPARSFA.fig	checkboxCalALFF	checkbox	ALFF+fALFF	IsCalALFF	高	标签直接说明同时算两者
+DPARSFA.fig	edtfAlffBandLow	edit	0.01	CalALFF.AHighPass_LowCutoff	高	Low=低频截止=高通下限
+DPARSFA.fig	edtfAlffBandHigh	edit	0.08	CalALFF.ALowPass_HighCutoff	高	High=高频截止=低通上限
+DPARSFA.fig	checkboxCalReHo	checkbox	ReHo	IsCalReHo	高	—
+DPARSFA.fig	radiobuttonReHo27voxels	radiobutton	27 voxels	CalReHo.ClusterNVoxel=27	高	—
+DPARSFA.fig	radiobuttonReHo19voxels	radiobutton	19	CalReHo.ClusterNVoxel=19	高	—
+DPARSFA.fig	radiobuttonReHo7voxels	radiobutton	7	CalReHo.ClusterNVoxel=7	高	—
+DPARSFA.fig	checkboxSmoothReHo	checkbox	Smooth ReHo	CalReHo.SmoothReHo	高	—
+DPARSFA.fig	checkboxCalDegreeCentrality	checkbox	Degree Centrality	IsCalDegreeCentrality	高	—
+DPARSFA.fig	checkboxCalFC	checkbox	Functional Connectivity	IsCalFC	高	—
+DPARSFA.fig	checkboxExtractRESTdefinedROITC	checkbox	Extract ROI time courses	IsExtractROISignals	中	推断：DPABI 文档该选项即 "Extract ROI Signals"
+DPARSFA.fig	checkboxDefineROIInteractively	checkbox	Define ROI Interactively*	IsDefineROIInteractively	高	—
+DPARSFA.fig	pushbuttonDefineROI	pushbutton	Define ROI	（打开 ROI 子界面，写 CalFC.ROIDef / IsMultipleLabel）	高	SubGUIs/DPARSF_ROI_Template.m
+DPARSFA.fig	checkboxCWAS	checkbox	CWAS	IsCWAS	高	—
+DPARSFA.fig	checkboxCalVMHC	checkbox	VMHC	IsCalVMHC	高	—
+DPARSFA.fig	checkboxNormalizeToSymmetricGroupT1Mean	checkbox	Normalize to Symmetric Template	IsNormalizeToSymmetricGroupT1Mean	高	—
+DPARSFA.fig	checkboxSmoothBeforeVMHC	checkbox	Smooth	IsSmoothBeforeVMHC	高	—
+DPARSFA.fig	checkboxScrubbing	checkbox	Scrubbing	IsScrubbing	高	—
+DPARSFA.fig	checkboxWarpMasksIntoIndividualSpace	checkbox	Warp Masks into Individual Space	IsWarpMasksIntoIndividualSpace	高	—
+DPARSFA.fig	checkboxCovremoveAfterRealign	checkbox	Nuisance Covariates Regression	IsCovremove=1 且 Covremove.Timing='AfterRealign'	中	推断：同一标签出现两次，分别对应两种 Timing
+DPARSFA.fig	checkboxCovremoveAfterNormalize	checkbox	Nuisance Covariates Regression	IsCovremove=1 且 Covremove.Timing='AfterNormalize'	中	同上
+DPARSFA.fig	checkboxFilter_BeforeNormalize	checkbox	Filter (Hz):	IsFilter=1 且 Filter.Timing='BeforeNormalize'	中	推断
+DPARSFA.fig	checkboxFilter_AfterNormalize	checkbox	Filter	IsFilter=1 且 Filter.Timing='AfterNormalize'	中	推断
+DPARSFA.fig	edtBandLow	edit	0.01	Filter.AHighPass_LowCutoff	高	—
+DPARSFA.fig	edtBandHigh	edit	0.08	Filter.ALowPass_HighCutoff	高	—
+DPARSFA.fig	editPolynomialTrend	edit		Covremove.PolynomialTrend	高	—
+DPARSFA.fig	checkboxCovremoveWhiteMatter	checkbox	White matter signal	Covremove.WM.IsRemove	高	子界面 DPARSF_NuisanceSetting.m:125 确认同义控件
+DPARSFA.fig	checkboxCovremoveCSF	checkbox	CSF signal	Covremove.CSF.IsRemove	高	子界面 DPARSF_NuisanceSetting.m:148
+DPARSFA.fig	checkboxCovremoveWholeBrain	checkbox	Global signal	Covremove.WholeBrain.IsRemove	高	子界面 DPARSF_NuisanceSetting.m:171
+DPARSFA.fig	checkboxOtherCovariates	checkbox	Other covariates	Covremove.OtherCovariatesROI 非空	中	推断
+DPARSFA.fig	checkboxHeadMotionScrubbingRegressors	checkbox	Head motion scrubbing regressors	Covremove.IsHeadMotionScrubbingRegressors	高	—
+DPARSFA.fig	checkboxCovremoveIsAddMeanBack	checkbox	Add mean back	Covremove.IsAddMeanBack	高	—
+DPARSFA.fig	pushbutton_NuisanceSetting	pushbutton	Nuisance regressors (WM, CSF, Global)	（打开 Nuisance 子界面，写整个 Covremove 子树）	高	SubGUIs/DPARSF_NuisanceSetting.m:72-77（输入 Covremove，输出 Covremove）
+DPARSFA.fig	pushbuttonFieldMapCorrection	pushbutton	FieldMap Correction	（打开 FieldMap 子界面，写 Cfg.FieldMap.*）	高	SubGUIs/DPARSF_FieldMap.m
+DPARSFA.fig	radiobuttonRigidBody6	radiobutton	Rigid-body 6	Covremove.HeadMotion=1	中	推断：HeadMotion=1 即当前 6 参数（run:2826）
+DPARSFA.fig	radiobuttonDerivative12	radiobutton	Derivative 12	Covremove.HeadMotion=2	低	推断：可能为 2（当前+上一时刻）；源码 HeadMotion=3 也可用但 GUI 可能未暴露
+DPARSFA.fig	radiobuttonFriston24	radiobutton	Friston 24	Covremove.HeadMotion=4	中	推断：4=Friston24（run:2838）
+DPARSFA.fig	radiobuttonVoxelSpecific3	radiobutton	Voxel-specific 3	Covremove.HeadMotion=13	低	推断：11-14 体素级，13=3 参数模型
+DPARSFA.fig	radiobuttonVoxelSpecific12	radiobutton	Voxel-specific 12	Covremove.HeadMotion=14	低	推断：注释称 14 是 voxel-specific 12 模型
+DPARSFA.fig	popupmenuTemplateParameters	popupmenu	Template Parameters|...|Blank	（加载 Jobmats/Template_*.mat 覆盖 Cfg，不写单个字段）	高	列表与 Jobmats 目录模板一一对应
+DPARSF_NuisanceSetting.fig	WMButton	checkbox	（白质）	Covremove.WM.IsRemove	高	DPARSF_NuisanceSetting.m:125
+DPARSF_NuisanceSetting.fig	MethodPopup	popupmenu		Covremove.WM.Method / Covremove.CSF.Method	高	DPARSF_NuisanceSetting.m:127-133,150-156
+DPARSF_NuisanceSetting.fig	WMMaskPopup / CSFMaskPopup	popupmenu		Covremove.WM.Mask / Covremove.CSF.Mask	高	DPARSF_NuisanceSetting.m:135-141,158-164
+DPARSF_NuisanceSetting.fig	WMThrdEntry / CSFThrdEntry	edit		Covremove.WM.MaskThreshold / Covremove.CSF.MaskThreshold	高	DPARSF_NuisanceSetting.m:143,166
+DPARSF_NuisanceSetting.fig	edit_PCNumber	edit		Covremove.CSF.CompCorPCNum（WM 也复用它）	高	DPARSF_NuisanceSetting.m:145,168；引擎 run:2907 只用 CSF.CompCorPCNum
+DPARSF_NuisanceSetting.fig	WholeBrainButton	checkbox	（全脑）	Covremove.WholeBrain.IsRemove	高	DPARSF_NuisanceSetting.m:171
+DPARSF_NuisanceSetting.fig	checkboxBothWithWithoutGSR	checkbox		Covremove.WholeBrain.IsBothWithWithoutGSR	高	DPARSF_NuisanceSetting.m:172
+DPARSF_NuisanceSetting.fig	WholeBrainMaskPopup	popupmenu		Covremove.WholeBrain.Mask	高	DPARSF_NuisanceSetting.m:176-182
+DPARSF_ScrubbingSetting_gui.fig	editFDThreshold	edit		Scrubbing.FDThreshold	高	DPARSF_ScrubbingSetting_gui.m:128
+DPARSF_ScrubbingSetting_gui.fig	rtnM1..rtnM5	radiobutton		Scrubbing.ScrubbingMethod='cut'/'nearest'/'linear'/'spline'/'pchip'	高	DPARSF_ScrubbingSetting_gui.m:132-136
+DPARSF_ROI_Template.fig	checkboxMultiLabel	checkbox		CalFC.IsMultipleLabel	高	SubGUIs/DPARSF_ROI_Template.m:62,121-124
