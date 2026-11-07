@@ -98,6 +98,10 @@ node tests/node/qc_dsh_test/test-qc-dsh.mjs
   该脚本用 `MRI_WORKBENCH_ROOT` 指向仓库内的 `matlab/MRI_Workbench`（部署时工作台位于
   会话工作区的 `MRI_Workbench/`，两者等价），并用独立临时目录作为会话工作区，避免受本机
   `.mri-workbench/` 运行状态影响。
+- `qc_dsh_test/test-apply-wiring.mjs`：「`/mri qc <不存在的目录>`」这一项在 Windows 上断言命中
+  「工作目录不存在」（MATLAB 可用时目录校验先触发）；ubuntu CI 没有 MATLAB，命令会先报
+  「未找到 matlab」，因此非 Windows 环境改为接受 `工作目录不存在` 或 `未找到 matlab` 两条预期
+  错误分支之一并打印 `SKIP` 说明，**检查数与 kind=error / 「MRI 工作台操作失败」断言不变**。
 - `fixtures/qc_dsh_test/make_fixtures.ps1` 只适用于 Windows PowerShell，仅作再生成参考（CI 不运行）。
 - 其余脚本不依赖操作系统；测试数据里出现的目录/文件路径均为假数据字符串，不访问真实文件系统。
 
